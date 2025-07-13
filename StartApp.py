@@ -22,8 +22,11 @@ def save_path(selected_folder):
 
     # Пути к вашим питон-файлам
     project_dir = os.path.dirname(os.path.abspath(__file__))
-    group_script = os.path.join(project_dir, "FileGroup.py")
-    ungroup_script = os.path.join(project_dir, "FileRegroup.py")
+    print(project_dir)
+    group_script = os.path.join(f"{project_dir}\\FileGroup.py")
+    print(group_script)
+    ungroup_script = os.path.join(f"{project_dir}\\FileUngroup.py")
+    print(ungroup_script)
 
     # === Новое: запись пути в файл worksheetpath.txt ===
     worksheet_file = os.path.join(project_dir, "worksheetpath.txt")
