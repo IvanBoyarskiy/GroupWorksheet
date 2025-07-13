@@ -149,9 +149,12 @@ def get_files(file_type):
             full_path = file_path.resolve()
             directory = file_path.parent
             filename = file_path.name
-            new_directory = f'{directory}{directory_name_by_ext(type)}'
-            # newpath = f'{directory}{directory_name_by_ext(type)}\\{filename}'
-            dict.append([full_path, Path(new_directory)])
+            if (filename == 'Группировать.lnk' or filename == 'Разгруппировать.lnk'):
+                pass
+            else:
+                new_directory = f'{directory}{directory_name_by_ext(type)}'
+                # newpath = f'{directory}{directory_name_by_ext(type)}\\{filename}'
+                dict.append([full_path, Path(new_directory)])
     return dict
 def send_files(files):
     for file in files:
