@@ -1,73 +1,68 @@
 import sys
+import os
 import tkinter as tk
 from tkinter import filedialog
-import os
 import win32com.client
 
 
-# === Функция для создания ярлыка ===
-def create_shortcut(target_path, shortcut_name, folder):
-    desktop = folder
-    path = os.path.join(desktop, f"{shortcut_name}.lnk")
-    shell = win32com.client.Dispatch("WScript.Shell")
-    shortcut = shell.CreateShortcut(path)
-    shortcut.TargetPath = target_path
-    shortcut.WorkingDirectory = os.path.dirname(target_path)
-    shortcut.IconLocation = "python.exe"  # Можно заменить на .ico файл
-    shortcut.save()
-
-
+# === Получение пути к проекту ===
 def get_project_dir():
     if getattr(sys, 'frozen', False):
-        # Если запущено из .exe
         return os.path.dirname(sys.executable)
     else:
-        # Если запущено как обычный .py файл
         return os.path.dirname(os.path.abspath(__file__))
 
 
+# === Создание ярлыка на .exe файл ===
+def create_shortcut(target_path, shortcut_name, folder):
+    shortcut_path = os.path.join(folder, f"{shortcut_name}.lnk")
 
-# === Ваша функция save_path ===
+    shell = win32com.client.Dispatch("WScript.Shell")
+    shortcut = shell.CreateShortcut(shortcut_path)
+    shortcut.TargetPath = target_path  # Теперь это .exe
+    shortcut.WorkingDirectory = os.path.dirname(target_path)
+    shortcut.IconLocation = target_path  # Иконка от .exe
+    try:
+        shortcut.save()
+        print(f"Ярлык '{shortcut_name}' создан: {shortcut_path}")
+    except Exception as e:
+        print(f"Ошибка при создании ярлыка '{shortcut_name}': {e}")
+
+
+# === Функция сохранения пути и создания ярлыков ===
 def save_path(selected_folder):
     print(f"Выбранная папка: {selected_folder}")
 
-    # Пути к вашим питон-файлам
     project_dir = get_project_dir()
-    group_script = os.path.join(project_dir, "FileGroup.py")
-    ungroup_script = os.path.join(project_dir, "FileUngroup.py")
 
-    # === Новое: запись пути в файл worksheetpath.txt ===
+    group_exe = os.path.join(project_dir, "dist/FileGroup.exe")
+    ungroup_exe = os.path.join(project_dir, "dist/FileRegroup.exe")
+
     worksheet_file = os.path.join(project_dir, "worksheetpath.txt")
-
     try:
         with open(worksheet_file, 'w', encoding='utf-8') as f:
-            f.write(selected_folder)  # Записываем выбранный путь
+            f.write(selected_folder)
         print(f"Путь сохранён в {worksheet_file}")
     except Exception as e:
-        print(f"Ошибка при записи в файл: {e}")
+        print(f"Ошибка записи файла: {e}")
 
-    # Создание ярлыков
-    create_shortcut(group_script, "Группировать", selected_folder)
-    create_shortcut(ungroup_script, "Разгруппировать", selected_folder)
+    create_shortcut(group_exe, "Группировать", selected_folder)
+    create_shortcut(ungroup_exe, "Разгруппировать", selected_folder)
+    root.destroy()
 
 
 # === GUI ===
 def select_folder():
-    folder_selected = filedialog.askdirectory()
-    if folder_selected:
-        save_path(folder_selected)
-        root.destroy()  # Закрыть окно после выбора
+    folder = filedialog.askdirectory()
+    if folder:
+        save_path(folder)
 
 
-# === Запуск GUI ===
 root = tk.Tk()
 root.title("Выбор папки")
 root.geometry("400x150")
 
-label = tk.Label(root, text="Выберите папку для установки ярлыков:", pady=20)
-label.pack()
-
-button = tk.Button(root, text="Выбрать папку", command=select_folder)
-button.pack()
+tk.Label(root, text="Выберите папку для установки ярлыков:", pady=20).pack()
+tk.Button(root, text="Выбрать папку", command=select_folder).pack()
 
 root.mainloop()
