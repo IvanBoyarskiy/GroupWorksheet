@@ -1,3 +1,4 @@
+import sys
 import tkinter as tk
 from tkinter import filedialog
 import os
@@ -16,17 +17,24 @@ def create_shortcut(target_path, shortcut_name, folder):
     shortcut.save()
 
 
+def get_project_dir():
+    if getattr(sys, 'frozen', False):
+        # Если запущено из .exe
+        return os.path.dirname(sys.executable)
+    else:
+        # Если запущено как обычный .py файл
+        return os.path.dirname(os.path.abspath(__file__))
+
+
+
 # === Ваша функция save_path ===
 def save_path(selected_folder):
     print(f"Выбранная папка: {selected_folder}")
 
     # Пути к вашим питон-файлам
-    project_dir = os.path.dirname(os.path.abspath(__file__))
-    print(project_dir)
-    group_script = os.path.join(f"{project_dir}\\FileGroup.py")
-    print(group_script)
-    ungroup_script = os.path.join(f"{project_dir}\\FileUngroup.py")
-    print(ungroup_script)
+    project_dir = get_project_dir()
+    group_script = os.path.join(project_dir, "FileGroup.py")
+    ungroup_script = os.path.join(project_dir, "FileUngroup.py")
 
     # === Новое: запись пути в файл worksheetpath.txt ===
     worksheet_file = os.path.join(project_dir, "worksheetpath.txt")
