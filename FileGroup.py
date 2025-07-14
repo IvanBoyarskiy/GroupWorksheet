@@ -1,4 +1,5 @@
 import shutil
+import sys
 from pathlib import Path
 import os
 
@@ -112,19 +113,19 @@ def if_directory_exist(directory_path):
         return False
 def directory_name_by_ext(file_type: str):
     if file_type in documentType:
-        return f"\\{get_from_txt('documentfilesname.txt')}"
+        return f"\\{get_from_txt(resource_path('documentfilesname.txt'))}"
     elif file_type in archiveType:
-        return f"\\{get_from_txt('archivefilesname.txt')}"
+        return f"\\{get_from_txt(resource_path('archivefilesname.txt'))}"
     elif file_type in imageType:
-        return f"\\{get_from_txt('imagefilesname.txt')}"
+        return f"\\{get_from_txt(resource_path('imagefilesname.txt'))}"
     elif file_type in videoType:
-        return f"\\{get_from_txt('videofilesname.txt')}"
+        return f"\\{get_from_txt(resource_path('videofilesname.txt'))}"
     elif file_type in audioType:
-        return f"\\{get_from_txt('audiofilesname.txt')}"
+        return f"\\{get_from_txt(resource_path('audiofilesname.txt'))}"
     elif file_type in appType:
-        return f"\\{get_from_txt('appfilesname.txt')}"
+        return f"\\{get_from_txt(resource_path('appfilesname.txt'))}"
     elif file_type in shortcutType:
-        return f"\\{get_from_txt('shortcutfilesname.txt')}"
+        return f"\\{get_from_txt(resource_path('shortcutfilesname.txt'))}"
     elif file_type in codeType:
         return "\CodeFiles"
     else:
@@ -144,7 +145,7 @@ def get_from_txt(file_path: str):
 def get_files(file_type):
     dict = []
     for type in file_type:
-        for file_path in Path(get_from_txt("worksheetpath.txt")).glob(f'*.{type}'):
+        for file_path in Path(get_from_txt(resource_path("worksheetpath.txt"))).glob(f'*.{type}'):
             get_info_file(file_path)
             full_path = file_path.resolve()
             directory = file_path.parent
@@ -168,6 +169,13 @@ def get_all_files(mas):
         for file in theme:
             dict.append(file)
     return dict
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 all_text_files = get_files(documentType)
 all_archive_files = get_files(archiveType)
