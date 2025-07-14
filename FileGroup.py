@@ -112,24 +112,24 @@ def if_directory_exist(directory_path):
         return False
 def directory_name_by_ext(file_type: str):
     if file_type in documentType:
-        return "\DocumentFiles"
+        return f"\\{get_from_txt('documentfilesname.txt')}"
     elif file_type in archiveType:
-        return "\ArchiveFiles"
+        return f"\\{get_from_txt('archivefilesname.txt')}"
     elif file_type in imageType:
-        return "\ImageFiles"
+        return f"\\{get_from_txt('imagefilesname.txt')}"
     elif file_type in videoType:
-        return "\VideoFiles"
+        return f"\\{get_from_txt('videofilesname.txt')}"
     elif file_type in audioType:
-        return "\AudioFiles"
+        return f"\\{get_from_txt('audiofilesname.txt')}"
     elif file_type in appType:
-        return "\AppFiles"
+        return f"\\{get_from_txt('appfilesname.txt')}"
     elif file_type in shortcutType:
-        return "\ShortcutFiles"
+        return f"\\{get_from_txt('shortcutfilesname.txt')}"
     elif file_type in codeType:
         return "\CodeFiles"
     else:
         return "\AnotherFiles"
-def get_worksheet_path(file_path: str):
+def get_from_txt(file_path: str):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             path = file.readline().strip()
@@ -144,7 +144,7 @@ def get_worksheet_path(file_path: str):
 def get_files(file_type):
     dict = []
     for type in file_type:
-        for file_path in Path(get_worksheet_path("worksheetpath.txt")).glob(f'*.{type}'):
+        for file_path in Path(get_from_txt("worksheetpath.txt")).glob(f'*.{type}'):
             get_info_file(file_path)
             full_path = file_path.resolve()
             directory = file_path.parent
