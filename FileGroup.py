@@ -100,6 +100,7 @@ codeType = [
     'html', 'htm', 'xhtml', 'xml', 'rss', 'xslt', 'xsd', 'dtd', 'json', 'yaml',
     'yml', 'toml', 'plist', 'log', 'bak',
 ]
+APP_DIR = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def get_info_file(file_path):
     print(f"Полный путь: {file_path.resolve()}")
@@ -113,19 +114,19 @@ def if_directory_exist(directory_path):
         return False
 def directory_name_by_ext(file_type: str):
     if file_type in documentType:
-        return f"\\{get_from_txt(resource_path('documentfilesname.txt'))}"
+        return f"\\{get_from_txt(resource_path('txts/documentfilesname.txt'))}"
     elif file_type in archiveType:
-        return f"\\{get_from_txt(resource_path('archivefilesname.txt'))}"
+        return f"\\{get_from_txt(resource_path('txts/archivefilesname.txt'))}"
     elif file_type in imageType:
-        return f"\\{get_from_txt(resource_path('imagefilesname.txt'))}"
+        return f"\\{get_from_txt(resource_path('txts/imagefilesname.txt'))}"
     elif file_type in videoType:
-        return f"\\{get_from_txt(resource_path('videofilesname.txt'))}"
+        return f"\\{get_from_txt(resource_path('txts/videofilesname.txt'))}"
     elif file_type in audioType:
-        return f"\\{get_from_txt(resource_path('audiofilesname.txt'))}"
+        return f"\\{get_from_txt(resource_path('txts/audiofilesname.txt'))}"
     elif file_type in appType:
-        return f"\\{get_from_txt(resource_path('appfilesname.txt'))}"
+        return f"\\{get_from_txt(resource_path('txts/appfilesname.txt'))}"
     elif file_type in shortcutType:
-        return f"\\{get_from_txt(resource_path('shortcutfilesname.txt'))}"
+        return f"\\{get_from_txt(resource_path('txts/shortcutfilesname.txt'))}"
     elif file_type in codeType:
         return "\CodeFiles"
     else:
@@ -145,7 +146,7 @@ def get_from_txt(file_path: str):
 def get_files(file_type):
     dict = []
     for type in file_type:
-        for file_path in Path(get_from_txt(resource_path("worksheetpath.txt"))).glob(f'*.{type}'):
+        for file_path in Path(get_from_txt(resource_path("txts/worksheetpath.txt"))).glob(f'*.{type}'):
             get_info_file(file_path)
             full_path = file_path.resolve()
             directory = file_path.parent
@@ -170,12 +171,7 @@ def get_all_files(mas):
             dict.append(file)
     return dict
 def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
+    return os.path.join(APP_DIR, relative_path)
 
 all_text_files = get_files(documentType)
 all_archive_files = get_files(archiveType)
