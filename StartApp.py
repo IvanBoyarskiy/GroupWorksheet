@@ -1,56 +1,54 @@
+import os
 import tkinter as tk
-from tkinter import filedialog
 
 def save_name(filename, user_text):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(user_text)
-def select_folder():
-    folder_path = filedialog.askdirectory()
-    if folder_path:
-        path.config(text=folder_path)
-        save_name('worksheetpath.txt', folder_path)
-        print(path.cget("text"))
 def save_to_files():
-        if entry_app.get().strip() == "":
+
+    desktop = os.path.join(os.environ["USERPROFILE"], "Desktop")
+    save_name('worksheetpath.txt', desktop)
+
+    if entry_app.get().strip() == "":
             save_name('appfilesname.txt', "AppFiles")
-        else:
+    else:
             save_name('appfilesname.txt', entry_app.get())
 
-        if entry_arc.get().strip() == "":
+    if entry_arc.get().strip() == "":
             save_name('archivefilesname.txt', "ArchiveFiles")
-        else:
+    else:
             save_name('archivefilesname.txt', entry_arc.get())
 
-        if entry_aud.get().strip() == "":
+    if entry_aud.get().strip() == "":
             save_name('audiofilesname.txt', "AudioFiles")
-        else:
+    else:
             save_name('audiofilesname.txt', entry_aud.get())
 
-        if entry_code.get().strip() == "":
+    if entry_code.get().strip() == "":
             save_name('codefilesname.txt', "CodeFiles")
-        else:
+    else:
             save_name('codefilesname.txt', entry_code.get())
 
-        if entry_doc.get().strip() == "":
+    if entry_doc.get().strip() == "":
             save_name('documentfilesname.txt', "DocumentFiles")
-        else:
+    else:
             save_name('documentfilesname.txt', entry_doc.get())
 
-        if entry_img.get().strip() == "":
+    if entry_img.get().strip() == "":
             save_name('imagefilesname.txt', "ImageFiles")
-        else:
+    else:
             save_name('imagefilesname.txt', entry_img.get())
 
-        if entry_shr.get().strip() == "":
+    if entry_shr.get().strip() == "":
             save_name('shortcutfilesname.txt', "ShortcutFiles")
-        else:
+    else:
             save_name('shortcutfilesname.txt', entry_shr.get())
 
-        if entry_vid.get().strip() == "":
+    if entry_vid.get().strip() == "":
             save_name('videofilesname.txt', "VideoFiles")
-        else:
+    else:
             save_name('videofilesname.txt', entry_vid.get())
-        window.destroy()
+    window.destroy()
 def get_from_txt(file_path: str):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -68,25 +66,13 @@ def get_from_txt(file_path: str):
 
 window = tk.Tk()
 window.title("Настройки Группировщика")
-window.geometry('600x400')
-
-frame_main = tk.Frame(window)
-frame_main.grid(row=0, column=0)
-
-label_1 = tk.Label(frame_main, text="Выберете путь к Рабочему столу", font=("Arial", 14))
-label_1.pack(side=tk.TOP, pady=10)
-path = tk.Label(frame_main, text="Папка не выбрана", font=("Arial", 12))
-path.pack(pady=5)
-path.config(text=get_from_txt('worksheetpath.txt'))
-
-button = tk.Button(frame_main, text="Выбрать папку", command=select_folder)
-button.pack(pady=10)
+window.geometry('300x500')
 
 frame = tk.Frame(window)
-frame.grid(row=0, column=1, padx=50, pady=20)
+frame.pack()
 
 label_2 = tk.Label(frame, text="Выберите названия", font=("Arial", 14))
-label_2.pack()
+label_2.pack(pady=20)
 
 label_app = tk.Label(frame, text="Приложения (.exe и т.п.):")
 label_app.pack()
@@ -138,7 +124,7 @@ entry_vid.insert(0, get_from_txt('videofilesname.txt'))
 
 
 close_button = tk.Button(window, text="Сохранить", command=save_to_files)
-close_button.grid(row=1, column=0)
+close_button.pack(pady=20)
 
 
 window.mainloop()
